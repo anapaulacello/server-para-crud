@@ -48,13 +48,17 @@ const getProductoById = async (req, res, next) => {
 
 const updateProducto= async(req,res,next)=>{
     try{
-        const {_id}=req.body;
-        const producto=await Producto.findOneAndUpdate({_id:_id},{_id:_id,nombre:req.body.nombre, categoria:req.body.categoria, ubicacion:req.body.ubicacion, precio:req.body.precio})
-            return res.json({
-                status: 200,
-                message: HTTPSTATUSCODE[200],
-                data: { Producto: `${producto.Producto} actualizado` }
-            })
+        const{nombre,categoria,ubicacion,precio}=req.body;
+        let producto=await Producto.findById(req.params.id)
+        if(!producto){
+            res.status(404).json({msg:'no existe el producto'})
+        }
+        producto.nombre=nombre;
+        producto.categoria=categoria;
+        producto.ubicacion=ubicacion;
+        producto.precio=precio;
+        producto=await Producto.findOneAndUpdate({_id:req.params.id},producto,{new:true});
+        res.json(producto);
     }catch(err){
         return next(err)
     }
