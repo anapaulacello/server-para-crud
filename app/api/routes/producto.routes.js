@@ -7,6 +7,6 @@ router.post("/create", createProducto );
 router.get("/allProductos", getAllProductos );
 router.get("/:id", getProductoById );
 router.put("/update/:id", updateProducto );
-router.delete("/delete", deleteProducto );
+router.delete("/delete/:id", deleteProducto );
 
 module.exports = router;

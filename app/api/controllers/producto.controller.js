@@ -64,16 +64,14 @@ const updateProducto= async(req,res,next)=>{
     }
 }
 
-const deleteProducto=async (req,res,next)=>{
+const deleteProducto = async (req, res, next) => {
     try {
-        const {_id}=req.body;
-        await Producto.deleteOne({_id:_id})
-        console.log(req.body)
-        return res.json({
-            status: 200,
-            message: HTTPSTATUSCODE[200],
-            data: { Producto: `${_id} borrado` }
-        })
+        const producto =await Producto.findById(req.params.id)
+        if(!producto){
+            res.status(404).json({msg:'no existe el producto'})
+        }
+        await Producto.findByIdAndRemove({_id:req.params.id})
+        res.status(404).json({msg:'producto eliminado con exito'})
     } catch (error) {
         return next(error)
     }
