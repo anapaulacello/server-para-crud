@@ -59,8 +59,8 @@ const updateProducto= async(req,res,next)=>{
         producto.precio=precio;
         producto=await Producto.findOneAndUpdate({_id:req.params.id},producto,{new:true});
         res.json(producto);
-    }catch(err){
-        return next(err)
+    }catch(error){
+        return next(error)
     }
 }
 
@@ -71,7 +71,11 @@ const deleteProducto = async (req, res, next) => {
             res.status(404).json({msg:'no existe el producto'})
         }
         await Producto.findByIdAndRemove({_id:req.params.id})
-        res.status(404).json({msg:'producto eliminado con exito'})
+        return res.json({
+            status: 201,
+            message: HTTPSTATUSCODE[201],
+            data: { producto: producto }
+        })
     } catch (error) {
         return next(error)
     }
